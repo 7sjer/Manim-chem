@@ -1,0 +1,180 @@
+%%manim -v WARNING Chmicalbond
+from manim import *
+
+
+class Chmicalbond(Scene):
+  def construct(self):
+
+    P = RegularPolygon(n=6, color=WHITE, fill_opacity=1, stroke_width = 10, stroke_color = BLUE).scale(1.4)
+
+    T = Text("Benzene ring", font_size=50, color=BLUE)
+
+    D = Dot(color=BLUE)
+    T.next_to(P,DOWN , buff = 1)
+    self.play(Create(P),Create(D), run_time=2)
+
+    self.play(P.animate.rotate(1/2))
+    self.play(
+        D.animate.shift(DOWN*3)
+    )
+    #self.play (ReplacementTransform(D,T))
+
+    Vert= P.get_vertices()
+
+    for i in [0,2,4]:
+      Ls = Line(Vert[i],Vert[1+i],color = BLUE,stroke_width = 8).scale(0.8)
+      Ls.shift((P.get_center()-Ls.get_center())*0.2)
+      self.play(Create(Ls))
+
+    self.play(ReplacementTransform(D,T))
+    self.wait(2)
+
+
+    line1 = Line(Vert[0],Vert[0]+UR,color=BLUE,stroke_width=10)
+    self.play(Create(line1))
+    line2 = Line(line1.get_end(),line1.get_end()+DR,color=BLUE,stroke_width=10)
+    self.play(Create(line2))
+    line3 = Line(line2.get_end(),line2.get_end()+DOWN,color=BLUE,stroke_width =10)
+    line4 = Line(line2.get_end(),line2.get_end()+UR,color=BLUE,stroke_width=10)
+    self.play(Create(line3),Create(line4))
+
+    line5 = Line(line4.get_end(),line4.get_end()+UP,color=BLUE,stroke_width=10)
+    line6 = line5.copy().shift(RIGHT*0.2)
+    line7 = Line(line4.get_end(),line4.get_end()+DR,color=BLUE,stroke_width=10)
+    self.play(Create(line5),Create(line6),Create(line7))
+
+    T1 = Text("NH²",font_size =30 ,color=BLUE)
+    T1.next_to(line3.get_end(),DOWN,buff=0.2)
+
+    T2 = Text("OH",font_size =30 ,color=BLUE)
+    T2.next_to(line7.get_end(),DR,buff=0.2)
+
+    T3 = Text("O",font_size=30,color=BLUE)
+    T3.next_to(line5.get_end(),UP,buff=0.2)
+    self.play(Write(T1),Write(T2),Write(T3))
+
+
+    TN1 = Text("Phenylalanine",font_size=50,color=BLUE)
+    TN1.shift(DL*3)
+
+    self.play(ReplacementTransform(T,TN1))
+
+
+    self.wait(3)
+
+    #secondhalf (hydroxylations)
+
+    time1 = Text("First Hydroxylation(adding OH)",font_size=30,color=GRAY)
+    time2= Text("Second Hydroxylation(adding OH)",font_size=30,color=GRAY)
+    time1.shift(UL*3)
+    time2.shift(UL*3)
+
+    H1 = Line(Vert[3],Vert[3]+DL,stroke_width=8,color=GRAY).scale(0.8)
+    H2 = Line(Vert[2],Vert[2]+UL,stroke_width=8,color=GRAY).scale(0.8)
+
+    OH1 = Text("OH",font_size=30,color=GRAY)
+    OH1.next_to(H1.get_end(),DOWN,buff=0.2)
+
+    OH2 = Text("OH",font_size=30,color=GRAY)
+    OH2.next_to(H2.get_end(),UP,buff=0.2)
+
+    TN2 = Text("L-Tyrosine",font_size=50,color=BLUE)
+    TN3 = Text("DiHydroxy Phenylalanine(DOPA)",font_size=40,color=BLUE)
+    TN2.shift(DL*3)
+    TN3.shift(DOWN*3)
+
+
+    self.play(Write(time1))
+    self.play(Create(H1),Create(OH1),run_time=2)
+    self.play(ReplacementTransform(TN1,TN2),run_time=2)
+    self.wait(3)
+
+
+    self.play(ReplacementTransform(time1,time2))
+    self.play(Create(H2),Create(OH2),run_time=2)
+    self.play(ReplacementTransform(TN2,TN3),run_time=2)
+    self.wait(3)
+    all = VGroup(H1,H2,OH1,OH2)
+    self.play(all.animate.set_color(BLUE))
+    self.wait(2)
+
+
+    #Decarboxylation
+    time3 = Text("Decarboxylation (removing COOH)",color=YELLOW,font_size=30)
+    time3.shift(UL*3)
+    TN4 = Text("Dopamine",color=BLUE,font_size=50)
+    TN4.shift(DL*3)
+    MP = line4.point_from_proportion(0.5)
+    cutter = Line(MP,line4.get_end(),color=YELLOW,stroke_width=6)
+    cutter.rotate(45)
+    self.play(ReplacementTransform(time2,time3))
+    self.play(Create(cutter),run_time=2)
+    
+    self.play(FadeOut(line4,line5,line6,line7,T2,T3,cutter))
+    self.play(FadeOut(time3))
+    self.play(ReplacementTransform(TN3,TN4),run_time=2)
+    
+
+
+    
+    
+    #norepinephrine
+    state2 = Text("we reached the basic structral formula that all Catecholamines share",font_size=20)
+    state2.shift(UP*3)
+    time4 = Text("Third hydroxylation",font_size=30,color=GRAY)
+    time4.shift(UL*3)
+    H3 = Line(line1.get_end(),line1.get_end()+UP,color=GRAY,stroke_width=8)
+    OH3 = Text("OH",font_size=30,color=GRAY)
+    OH3.next_to(H3.get_end(),UP,buff=0.2)
+    TN5 = Text("Norepinephrine",font_size=50,color=BLUE)
+    TN5.shift(DL*3)
+
+    
+    self.play(Write(state2))
+    self.wait(5)
+    self.play(FadeOut(state2))
+    self.play(Write(time4))
+    self.play(Create(H3),Create(OH3),run_time=2)
+    self.play(ReplacementTransform(TN4,TN5))
+    self.wait(3)
+
+
+   #epinephrine
+    time5 = Text("Methylation(adding CH³)",font_size=30,color=GREEN)
+    time5.shift(UL*3)
+    C1 = Line(T1.get_center(),T1.get_center()+DR,color=GREEN,stroke_width=8).scale(0.6)
+    CH3 = Text("CH³",font_size=30,color=GREEN)
+    CH3.next_to(C1.get_end(),DR,buff=0.2)
+    TN6 = Text("Epinephrine",font_size=50,color=BLUE)
+    TN6.shift(DL*3)
+
+    T2 = Text("NH",font_size=30,color=BLUE)
+    T2.next_to(line3.get_end(),DOWN,buff=0.2)
+
+
+    self.play(ReplacementTransform(time4,time5))
+    self.wait(1)
+    self.play(Create(C1),Create(CH3),run_time=2)
+    self.play(ReplacementTransform(T1,T2))
+    self.play(ReplacementTransform(TN5,TN6))
+    self.wait(4)
+
+
+
+
+
+
+
+   
+  
+
+
+
+
+
+
+
+
+
+
+
