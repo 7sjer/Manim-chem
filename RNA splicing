@@ -1,0 +1,145 @@
+%%manim -v WARNING dna
+from manim import *
+
+
+class dna(Scene):
+  def construct(self):
+  #intro
+    Title = Text("mRNA splicing",color=RED)
+    self.play(Write(Title))
+    self.wait(3)
+    self.play(FadeOut(Title))
+
+
+  #first scene(explain general struc.)
+
+    #shapes
+    main_line1 = Line([2,0,0],[5,0,0],stroke_width=12,color="#8B0000")
+    main_line2 = Line([-5,0,0],[-2,0,0],stroke_width=12,color="#8B0000")
+    boundry1 = Dot(radius=0.1,color="#8B0000")
+    boundry2 = Dot(radius=0.1,color="#8B0000")
+    boundry1.shift([-2,0,0])
+    boundry2.shift([2,0,0])
+    intron = Line([2,0,0],[-2,0,0],color=YELLOW,stroke_width=12)
+
+    #text
+    label1,label2 = Text("5'",font_size=20),Text("3'",font_size=20)
+    label1.next_to(boundry1,DOWN)
+    label2.next_to(boundry2,DOWN)
+
+    label3,label4,label5 = Text("extron",font_size=30),Text("intron",font_size=30),Text("extron",font_size=30)
+    label3.shift([-4,-2,0])
+    label4.shift([0,-2,0])
+    label5.shift([4,-2,0])
+    labels = VGroup(label1,label2,label3,label4,label5)
+
+    branch_point = Arrow([0,2,0],[0,0,0])
+    label6 = Text("Branch point",font_size=20)
+    label6.next_to([0,2,0])
+    A = VGroup(branch_point,label6)
+    BP = Line([-0.2,0,0],[0.2,0,0],color=GREEN,stroke_width=12)
+
+
+
+
+    self.play(Create(main_line1),Create(main_line2))
+    self.play(Create(intron),run_time=3)
+    self.play(Create(boundry1),Create(boundry2))
+    self.play(Write(labels),run_time=5)
+    self.play(Create(A),run_time=3)
+    self.play(Create(BP))
+    self.wait(2)
+    self.play(FadeOut(A))
+
+
+  #nucelphilic attack
+    #U1, U2
+    U1 = Dot(radius=0.3,color=YELLOW)
+    T1 = Text("U1",font_size=20,color="#8B0000")
+    T1.move_to(U1.get_center())
+    U1_mo = VGroup(U1, T1)
+    U1_mo.shift([10,10,0])
+
+    U2 = Dot(radius=0.3,color=YELLOW)
+    T2 = Text("U2",font_size=20,color="#8B0000")
+    T2.move_to(U2.get_center())
+    U2_mo = VGroup(U2,T2)
+    U2_mo.shift([-10,10,0])
+
+    #ani
+    self.play(Create(U1_mo))
+    self.play(
+        U1_mo.animate.move_to(boundry1.get_center()),
+        run_time=4 )
+
+    self.play(Create(U2_mo))
+    self.play(
+        U2_mo.animate.move_to(ORIGIN),run_time=4
+    )
+
+    self.play(FadeOut(labels))
+    self.play(FadeOut(BP))
+  #bending
+    main_line3 = CubicBezier([2,0,0],[-0.2,2,0],[0.2,2,0],[-2,0,0],stroke_width=12,color=YELLOW)
+    main_line4 = Line([-2,-2,0],boundry1.get_center(),stroke_width=12,color="#8B0000")
+    main_line5 = Line(boundry2.get_center(),[2,-2,0],stroke_width=12,color="#8B0000")
+
+
+
+
+
+
+
+
+
+    #ani9
+    self.play(
+        ReplacementTransform(intron,main_line3),
+        ReplacementTransform(main_line1,main_line5),
+        ReplacementTransform(main_line2,main_line4),
+        U2_mo.animate.move_to(main_line3.point_from_proportion(0.5)),
+        run_time=8)
+
+
+
+    #U4,U5,U6
+    U4 = Dot(radius=0.3,color=YELLOW)
+    T4 = Text("U4",font_size=20,color="#8B0000")
+    T4.move_to(U4.get_center())
+    U4_mo = VGroup(U4, T4)
+    U4_mo.shift([10,0,0])
+
+    U5 = Dot(radius=1,color=YELLOW)
+    T5 = Text("U5",font_size=20,color="#8B0000")
+    T5.move_to(U5.get_center())
+    U5_mo = VGroup(U5, T5)
+    U5_mo.shift([10,-1,0])
+
+    U6 = Dot(radius=0.3,color=YELLOW)
+    T6 = Text("U6",font_size=20,color="#8B0000")
+    T6.move_to(U6.get_center())
+    U6_mo = VGroup(U6, T6)
+    U6_mo.shift([10,-2,0])
+
+
+    U456_complex = VGroup(U4_mo, U5_mo, U6_mo)
+
+
+    self.play(Create(U4_mo), Create(U5_mo), Create(U6_mo),FadeOut(U1_mo),run_time=4)
+    self.play(
+        U4_mo.animate.move_to(U2_mo.get_center() + RIGHT * 0.6),
+        U5_mo.animate.move_to(ORIGIN),
+        U6_mo.animate.move_to(boundry1.get_center()),
+        run_time=3
+    )
+
+    self.play(FadeOut(U4_mo),run_time=2)
+
+
+    
+
+
+
+
+
+    self.wait(4)
