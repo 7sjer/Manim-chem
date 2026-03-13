@@ -1,4 +1,4 @@
-%%manim -v WARNING dna
+%%writefile dna_scene.py
 from manim import *
 
 
@@ -11,15 +11,17 @@ class dna(Scene):
     self.play(FadeOut(Title))
 
 
-  #first scene(explain general struc.)
+  #firs scene(explain general struc.)
 
     #shapes
     main_line1 = Line([2,0,0],[5,0,0],stroke_width=12,color="#8B0000")
     main_line2 = Line([-5,0,0],[-2,0,0],stroke_width=12,color="#8B0000")
     boundry1 = Dot(radius=0.1,color="#8B0000")
     boundry2 = Dot(radius=0.1,color="#8B0000")
+
     boundry1.shift([-2,0,0])
     boundry2.shift([2,0,0])
+
     intron = Line([2,0,0],[-2,0,0],color=YELLOW,stroke_width=12)
 
     #text
@@ -27,14 +29,14 @@ class dna(Scene):
     label1.next_to(boundry1,DOWN)
     label2.next_to(boundry2,DOWN)
 
-    label3,label4,label5 = Text("extron",font_size=30),Text("intron",font_size=30),Text("extron",font_size=30)
+    label3,label4,label5 = Text("exon",font_size=30),Text("intron",font_size=30),Text("exon",font_size=30)
     label3.shift([-4,-2,0])
     label4.shift([0,-2,0])
     label5.shift([4,-2,0])
     labels = VGroup(label1,label2,label3,label4,label5)
 
     branch_point = Arrow([0,2,0],[0,0,0])
-    label6 = Text("Branch point",font_size=20)
+    label6 = Text("Branch point sequence",font_size=20)
     label6.next_to([0,2,0])
     A = VGroup(branch_point,label6)
     BP = Line([-0.2,0,0],[0.2,0,0],color=GREEN,stroke_width=12)
@@ -44,6 +46,7 @@ class dna(Scene):
 
     self.play(Create(main_line1),Create(main_line2))
     self.play(Create(intron),run_time=3)
+
     self.play(Create(boundry1),Create(boundry2))
     self.play(Write(labels),run_time=5)
     self.play(Create(A),run_time=3)
@@ -52,14 +55,18 @@ class dna(Scene):
     self.play(FadeOut(A))
 
 
-  #nucelphilic attack
+  #A complex
     #U1, U2
+    ex1 = Text("E complex is now formed(early complex)",font_size=30)
+    ex1.shift(UP*3)
     U1 = Dot(radius=0.3,color=YELLOW)
     T1 = Text("U1",font_size=20,color="#8B0000")
     T1.move_to(U1.get_center())
     U1_mo = VGroup(U1, T1)
     U1_mo.shift([10,10,0])
 
+    ex2 = Text("now pre-Spliceosome A complex is formed , awaiting Tri-snRNP arrival",font_size=25)
+    ex2.shift(UP*3)
     U2 = Dot(radius=0.3,color=YELLOW)
     T2 = Text("U2",font_size=20,color="#8B0000")
     T2.move_to(U2.get_center())
@@ -72,6 +79,8 @@ class dna(Scene):
         U1_mo.animate.move_to(boundry1.get_center()),
         run_time=4 )
 
+    self.play(Write(ex1))
+    self.wait(3)
     self.play(Create(U2_mo))
     self.play(
         U2_mo.animate.move_to(ORIGIN),run_time=4
@@ -79,12 +88,11 @@ class dna(Scene):
 
     self.play(FadeOut(labels))
     self.play(FadeOut(BP))
+
   #bending
-    main_line3 = CubicBezier([2,0,0],[-0.2,2,0],[0.2,2,0],[-2,0,0],stroke_width=12,color=YELLOW)
-    main_line4 = Line([-2,-2,0],boundry1.get_center(),stroke_width=12,color="#8B0000")
-    main_line5 = Line(boundry2.get_center(),[2,-2,0],stroke_width=12,color="#8B0000")
-
-
+    main_line3 = CubicBezier([2,0,0],[0.2,2,0],[-0.2,2,0],[-2,0,0],stroke_width=12,color=YELLOW)
+    main_line4 = Line([-5,-2,0],boundry1.get_center(),stroke_width=12,color="#8B0000")
+    main_line5 = Line(boundry2.get_center(),[5,-2,0],stroke_width=12,color="#8B0000")
 
 
 
@@ -100,20 +108,25 @@ class dna(Scene):
         U2_mo.animate.move_to(main_line3.point_from_proportion(0.5)),
         run_time=8)
 
-
+    self.play(ReplacementTransform(ex1,ex2))
+    self.wait(4)
 
     #U4,U5,U6
+    ex3 = Text("After the arrival of Tri-snRNP, spliceosome B complex is formed (pre catalyic) ",font_size = 18)
+    ex3.shift(UP*3)
+    ex4 = Text("spliceosome B complex will get activated when U1 (which got replaced by U6) and U4 are relased ",font_size=18)
+    ex4.next_to(ex3,DOWN)
     U4 = Dot(radius=0.3,color=YELLOW)
     T4 = Text("U4",font_size=20,color="#8B0000")
     T4.move_to(U4.get_center())
     U4_mo = VGroup(U4, T4)
     U4_mo.shift([10,0,0])
 
-    U5 = Dot(radius=1,color=YELLOW)
+    U5 = Dot(radius=0.7,color=YELLOW)
     T5 = Text("U5",font_size=20,color="#8B0000")
     T5.move_to(U5.get_center())
     U5_mo = VGroup(U5, T5)
-    U5_mo.shift([10,-1,0])
+    U5_mo.shift([10,-3,0])
 
     U6 = Dot(radius=0.3,color=YELLOW)
     T6 = Text("U6",font_size=20,color="#8B0000")
@@ -125,21 +138,71 @@ class dna(Scene):
     U456_complex = VGroup(U4_mo, U5_mo, U6_mo)
 
 
-    self.play(Create(U4_mo), Create(U5_mo), Create(U6_mo),FadeOut(U1_mo),run_time=4)
+    self.play(Create(U4_mo), Create(U5_mo), Create(U6_mo),run_time=4)
     self.play(
+        FadeOut(U1_mo),
         U4_mo.animate.move_to(U2_mo.get_center() + RIGHT * 0.6),
-        U5_mo.animate.move_to(ORIGIN),
+        U5_mo.animate.move_to(ORIGIN+DOWN*1.5),
         U6_mo.animate.move_to(boundry1.get_center()),
-        run_time=3
+        run_time=4
     )
 
+    self.play(ReplacementTransform(ex2,ex3))
+    self.play(Write(ex4))
+    self.wait(7)
     self.play(FadeOut(U4_mo),run_time=2)
+    self.play(FadeOut(ex3),FadeOut(ex4),run_time=3)
 
 
+
+  #Lariot structure
+    #first ester
+    P1 = Text("first transesterification by OH of branch point attacking 5' end splice site ",font_size = 20).shift(UP*3)
+    P2 = Text("second transesterification by OH of 5' splice site attacking the 3' end",font_size=20).shift(UP*3)
+    S1 = Text("Lariant formation",font_size=40).shift(DL*3)
+    d1,d2,d3,d4 = [2,0,0],[-1,2,0],[-0.5,-1.5,0],[1,0.5,0]
+    main_line6= CubicBezier(d1,d2,d3,d4,color=YELLOW,stroke_width=12)
+    sml1 = Line(boundry1.get_center(),boundry1.get_center()+ DR).scale(0.8)
+    sml2 = Line(boundry2.get_center(),boundry2.get_center()+ DL).scale(0.8)
+    lariant = VGroup(main_line6,U2_mo,U6_mo,U5_mo)
+    first_exon = VGroup(boundry1,main_line5)
+    second_exon = VGroup(boundry2,main_line4)
     
+    third_exon = CubicBezier(boundry1.get_center(),[-1,1,0],[1,1,0],boundry2.get_center(),
+    stroke_width=12,color="#8B0000")
+    
+    #ani
 
-
-
+    self.play(
+        ReplacementTransform(main_line3,main_line6),
+        U6_mo.animate.move_to(main_line6.get_end()),
+        U2_mo.animate.move_to(main_line6.point_from_proportion(0.7)),
+        
+        run_time = 7
+        )
+    self.play(Write(P1))
+    self.play(Write(S1)) 
+    self.wait(5)
+    self.play(Create(sml1),Create(sml2))
+    self.wait(3)
+    self.play(FadeOut(sml1),FadeOut(sml2))
+  
+    #second ester
+    self.play(ReplacementTransform(P1,P2))
+    self.wait(5)
+    self.play(
+       lariant.animate.move_to([10,10,0]),
+       FadeOut(S1),
+       run_time=6
+    )
+    
+    self.play(FadeOut(P2))
+    self.wait(3)
+    self.play(
+        Create(third_exon),
+        Write(Text("exons will join each other").shift(UP*3)),
+        run_time = 3
+    )
 
 
     self.wait(4)
